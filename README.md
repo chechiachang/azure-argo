@@ -6,10 +6,8 @@ ArgoCD
 https://github.com/argoproj/argo-helm/tree/master/charts/argo-cd
 
 ```
-kubectl create namespace argocd
-
-helm repo add argo https://argoproj.github.io/argo-helm
-helm install --namespace argocd --values values.yaml argocd argo/argo-cd
+helmfile --selector=name=argocd diff
+helmfile --selector=name=argocd apply
 ```
 
 # Access
