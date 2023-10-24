@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: general-argocd
+  namespace: argocd
+spec:
+  generators:
+  - git:
+      repoURL: https://github.com/chechiachang/azure-argo
+      revision: master
+      directories:
+      - path: clusters/dev/dev-general/argocd/*
+  template:
+    metadata:
+      name: 'dev-general-argocd-{{path.basename}}'
+      labels:
+        environment: dev
+        type: infra
+        function: argocd
+        cluster: dev-general
+    spec:
+      project: default
+      syncPolicy:
+        automated:
+          prune: true
+      source:
+        repoURL: https://github.com/chechiachang/azure-argo
+        targetRevision: master
+        path: 'clusters/dev/dev-general/argocd/{{path.basename}}'
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: argocd
