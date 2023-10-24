@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: namespace-management
+  namespace: default
+spec:
+  generators:
+    - clusters: {}
+  template:
+    metadata:
+      name: '{{name}}-namespace-management'
+      labels:
+        environment: dev-general
+        type: infra
+        function: bootstrap
+        cluster: '{{name}}'
+    spec:
+      project: default
+      syncPolicy:
+        automated:
+          prune: false
+      source:
+        repoURL: https://github.com/chechiachang/azure-argo
+        targetRevision: master
+        path: 'clusters/dev/{{name}}/namespaces'
+      destination:
+        server: '{{server}}'
